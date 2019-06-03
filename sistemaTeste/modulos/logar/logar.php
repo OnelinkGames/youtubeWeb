@@ -32,7 +32,7 @@ if ($quantidade > 0) {
 	$_SESSION['usuario'] = $login;
 	
 	//Redirecionar
-	redirect("home.php");
+	redirect("home.php?page=home");
 } else {
 	echo("Usuário e senha não conferem, favor verificar");
 }
