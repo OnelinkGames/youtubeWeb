@@ -1,14 +1,6 @@
+import { List } from './shared/components/schedule-list'
+import ScheduleList from "./shared/components/schedule-list"
 import './App.css'
-
-interface List {
-  id: number,
-  date: Date,
-  startTime: string,
-  finalTime: string,
-  title: string,
-  description: string,
-  color: string
-}
 
 const mock: Array<List> = [
   {
@@ -51,9 +43,7 @@ const mock: Array<List> = [
 
 function App() {
   return (
-    <>
-      <p>Nosso Projeto de Schedule List</p>
-    </>
+    <ScheduleList list={mock}></ScheduleList>
   )
 }
 
