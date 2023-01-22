@@ -2,6 +2,7 @@ import { List } from './shared/components/schedule-list'
 import ScheduleList from "./shared/components/schedule-list"
 import './App.css'
 
+// Mocked data to use on component.
 const mock: Array<List> = [
   {
     id: 0,
