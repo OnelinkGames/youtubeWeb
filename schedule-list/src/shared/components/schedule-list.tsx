@@ -4,14 +4,7 @@ import "./schedule-list.scss"
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
-    if (firstDate.date.getTime() < lastDate.date.getTime())
-        return -1;
-
-    if (firstDate.date.getTime() > lastDate.date.getTime())
-        return 1;
-
-    // Return in case of dates being equal.
-    return 0;
+    return firstDate.date.getTime() - lastDate.date.getTime();
 }
 
 // Function to compare date and return true or false
@@ -79,7 +72,7 @@ function ScheduleList(props: ListProps) {
     const { list } = props;
 
     // UseState that will be used by the application.
-    const [scheduleList, setScheduleList] = useState(Array<Array<List>>)
+    const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
 
     // UseEffect used to check the data.
     useEffect(() => {
