@@ -1,11 +1,15 @@
-$divider-orange-color: rgb(207, 154, 102);
-$divider-orange-shadow-color: rgba(206,156,102,0.9);
-$divider-purple-color: rgb(81, 67, 142);
-$divider-purple-shadow-color: rgba(86, 72, 152, 0.9);
-$divider-red-color: rgb(202, 13, 13);
-$divider-red-shadow-color: rgba(210, 24, 24, 0.9);
-$divider-blue-color: rgb(123, 201, 226);
-$divider-blue-shadow-color: rgba(41, 141, 171, 0.9);
+@mixin divider($baseColor: rgb(207, 154, 102), $shadowColor: rgba(206,156,102,0.9)) {
+    height: 30px;
+    width: 3px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border: 1px solid $baseColor;
+    border-radius: 10px;
+    background-color: $baseColor;
+    -webkit-box-shadow:0px 0px 10px 1px $shadowColor;
+    -moz-box-shadow: 0px 0px 10px 1px $shadowColor;
+    box-shadow: 0px 0px 10px 1px $shadowColor;
+}
 
 .schedule-date {
     color: rgb(158, 156, 169);
@@ -40,55 +44,19 @@ $divider-blue-shadow-color: rgba(41, 141, 171, 0.9);
     }
 
     .divider-orange {
-        height: 30px;
-        width: 3px;
-        margin-right: 20px;
-        margin-left: 20px;
-        border: 1px solid $divider-orange-color;
-        border-radius: 10px;
-        background-color: $divider-orange-color;
-        -webkit-box-shadow:0px 0px 10px 1px $divider-orange-shadow-color;
-        -moz-box-shadow: 0px 0px 10px 1px $divider-orange-shadow-color;
-        box-shadow: 0px 0px 10px 1px $divider-orange-shadow-color;
+        @include divider;
     }
 
     .divider-purple {
-        height: 30px;
-        width: 3px;
-        margin-right: 20px;
-        margin-left: 20px;
-        border: 1px solid $divider-purple-color;
-        border-radius: 10px;
-        background-color: $divider-purple-color;
-        -webkit-box-shadow:0px 0px 10px 1px $divider-purple-shadow-color;
-        -moz-box-shadow: 0px 0px 10px 1px $divider-purple-shadow-color;
-        box-shadow: 0px 0px 10px 1px $divider-purple-shadow-color;
+        @include divider($baseColor: rgb(81, 67, 142), $shadowColor: rgba(86, 72, 152, 0.9));
     }
 
     .divider-red {
-        height: 30px;
-        width: 3px;
-        margin-right: 20px;
-        margin-left: 20px;
-        border: 1px solid $divider-red-color;
-        border-radius: 10px;
-        background-color: $divider-red-color;
-        -webkit-box-shadow:0px 0px 10px 1px $divider-red-shadow-color;
-        -moz-box-shadow: 0px 0px 10px 1px $divider-red-shadow-color;
-        box-shadow: 0px 0px 10px 1px $divider-red-shadow-color;
+        @include divider($baseColor: rgb(202, 13, 13), $shadowColor: rgba(210, 24, 24, 0.9));
     }
 
     .divider-blue {
-        height: 30px;
-        width: 3px;
-        margin-right: 20px;
-        margin-left: 20px;
-        border: 1px solid $divider-blue-color;
-        border-radius: 10px;
-        background-color: $divider-blue-color;
-        -webkit-box-shadow:0px 0px 10px 1px $divider-blue-shadow-color;
-        -moz-box-shadow: 0px 0px 10px 1px $divider-blue-shadow-color;
-        box-shadow: 0px 0px 10px 1px $divider-blue-shadow-color;
+        @include divider($baseColor: rgb(123, 201, 226), $shadowColor: rgba(41, 141, 171, 0.9));
     }
 
     .informations {
