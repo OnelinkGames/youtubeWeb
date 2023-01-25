@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./schedule-list.scss"
 
 // Interface for the list of mocked data.
 export interface List {
