@@ -1,5 +1,5 @@
-import { List } from './shared/components/schedule-list'
 import ScheduleList from "./shared/components/schedule-list"
+import { List } from "./shared/components/schedule-list.interfaces"
 import './App.css'
 
 // Mocked data to use on component.

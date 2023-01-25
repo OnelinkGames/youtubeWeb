@@ -1,37 +1,10 @@
 import { useEffect, useState } from "react";
+import { List, ListProps, MonthList } from "./schedule-list.interfaces";
 import "./schedule-list.scss"
-
-// Interface for the list of mocked data.
-export interface List {
-    id: number,
-    date: Date,
-    startTime: string,
-    finalTime: string,
-    title: string,
-    description: string,
-    color: string
-  }
-
-// Interface for the props of the component.
-interface ListProps {
-    list: Array<List>
-}
-
-// Interface for month list.
-interface MonthList {
-    [key: number]: string
-}
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
-    if (firstDate.date.getTime() < lastDate.date.getTime())
-        return -1;
-
-    if (firstDate.date.getTime() > lastDate.date.getTime())
-        return 1;
-
-    // Return in case of dates being equal.
-    return 0;
+    return firstDate.date.getTime() - lastDate.date.getTime();
 }
 
 // Function to compare date and return true or false
