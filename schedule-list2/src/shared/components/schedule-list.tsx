@@ -16,6 +16,11 @@ interface ListProps {
     list: Array<List>
 }
 
+// Interface for month list.
+interface MonthList {
+    [key: number]: string
+}
+
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
     if (firstDate.date.getTime() < lastDate.date.getTime())
@@ -69,6 +74,25 @@ function createScheduleList(list: Array<List>): Array<Array<List>> {
     return newArray;
 }
 
+function convertMonth(month: number): string {
+    let months: MonthList = {
+        0: "January",
+        1: "February",
+        2: "March",
+        3: "April",
+        4: "May",
+        5: "June",
+        6: "July",
+        7: "August",
+        8: "September",
+        9: "October",
+        10: "November",
+        11: "December"
+    }
+
+    return months[month];
+}
+
 function ScheduleList(props: ListProps) {
     // Recovering the props according to the interface.
     const { list } = props;
@@ -83,12 +107,31 @@ function ScheduleList(props: ListProps) {
 
         // Create the ScheduleList that will be used by the component.
         setScheduleList(createScheduleList(sortedList))
+
+        // Print the object
+        console.log(scheduleList)
     }, [])
 
     return (
         <>
-        <div>{JSON.stringify(list)}</div>
-        <div>{JSON.stringify(scheduleList)}</div>
+            {scheduleList.map((schedule, index) => (
+                <div key={index + "List"} className="schedule-date">
+                    <p>{schedule[0].date.getDate()} {convertMonth(schedule[0].date.getMonth())}</p>
+                    {schedule.map((innerList) => (
+                        <div key={innerList.id} className="schedule-item">
+                            <div className="time">
+                                <p>{innerList.startTime}</p>
+                                <p>{innerList.finalTime}</p>
+                            </div>
+                            <div className={"divider-" + innerList.color}></div>
+                            <div className="informations">
+                                <p>{innerList.title}</p>
+                                <p>{innerList.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ))}
         </>
     )
 }
