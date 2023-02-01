@@ -72,7 +72,7 @@ function ScheduleList(props: ListProps) {
     const { list } = props;
 
     // UseState that will be used by the application.
-    const [scheduleList, setScheduleList] = useState(Array<Array<List>>)
+    const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
 
     // UseEffect used to check the data.
     useEffect(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { List, ListProps, MonthList } from './schedule-list.interfaces'
-import "./schedule-list.scss"
+import { List, ListProps, MonthList, ColorList } from './schedule-list.interfaces'
+import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
@@ -67,6 +67,31 @@ function convertMonth(month: number): string {
     return months[month];
 }
 
+function getColor(color: string, type: string): string {
+    let colors: ColorList = {
+        orange: {
+            base: "#CF9A66",
+            shadow: "#ce9c66e6"
+        },
+        purple: {
+            base: "#51438E",
+            shadow: "#564898e6"
+        },
+        red: {
+            base: "#CA0D0D",
+            shadow: "#d21818e6"
+        },
+        blue: {
+            base: "#7BC9E2",
+            shadow: "#298dabe6"
+        }
+    }
+
+    let finalColor = colors[color]
+
+    return type == "base" ? finalColor.base : finalColor.shadow;
+}
+
 function ScheduleList(props: ListProps) {
     // Recovering the props according to the interface.
     const { list } = props;
@@ -86,22 +111,22 @@ function ScheduleList(props: ListProps) {
     return (
         <>
             {scheduleList.map((schedule, index) => (
-                <div key={index + "List"} className="schedule-date">
+                <HeaderDate key={index + "List"}>
                     <p>{schedule[0].date.getDate()} {convertMonth(schedule[0].date.getMonth())} :</p>
                     {schedule.map((innerList, index) => (
-                        <div key={innerList.id} className="schedule-item">
-                            <div className="time">
+                        <SchedList key={innerList.id}>
+                            <TimeSector>
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
-                            </div>
-                            <div className={"divider-" + innerList.color}></div>
-                            <div className="informations">
+                            </TimeSector>
+                            <Divider base_color={getColor(innerList.color, "base")} shadow_color={getColor(innerList.color, "shadow")} />
+                            <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
-                            </div>
-                        </div>
+                            </InformationsSector>
+                        </SchedList>
                     ))}
-                </div>
+                </HeaderDate>
             ))
             }
         </>
