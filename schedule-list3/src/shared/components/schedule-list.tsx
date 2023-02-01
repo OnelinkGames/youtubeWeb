@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { List, ListProps, MonthList } from "./schedule-list.interfaces";
-import styled from "styled-components"
-import "./schedule-list.scss"
+import { ColorList, List, ListProps, MonthList } from "./schedule-list.interfaces";
+import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
@@ -68,6 +67,31 @@ function convertMonth(month: number): string {
     return months[month];
 }
 
+function getColor(color: string, type: string): string {
+    let colors: ColorList = {
+        orange: {
+            base: "#CF9A66",
+            shadow: "#CE9C66E6"
+        },
+        purple: {
+            base: "#51438E",
+            shadow: "#564898e6"
+        },
+        red: {
+            base: "#CA0D0D",
+            shadow: "#d21818e6"
+        },
+        blue: {
+            base: "#7BC9E2",
+            shadow: "#298dabe6"
+        }
+    }
+
+    let finalColor = colors[color];
+
+    return type == "base" ? finalColor.base : finalColor.shadow;
+}
+
 function ScheduleList(props: ListProps) {
     // Recovering the props according to the interface.
     const { list } = props;
@@ -87,57 +111,6 @@ function ScheduleList(props: ListProps) {
         console.log(scheduleList)
     }, [])
 
-    const HeaderDate = styled.div`
-        color: #9E9CA9;
-        margin: 20px;
-    `
-
-    const SchedList = styled.div`
-        width: 20%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 20px;
-    `
-
-    const TimeSector = styled.div`
-        p {
-        margin: 0px;
-        padding: 0px;
-        }
-
-        p:nth-child(1) {
-            font-size: 1.2em;
-            font-weight: bolder;
-            color: #51438E;
-        };
-
-        p:nth-child(2) {
-            font-size: 0.6em;
-            color: #D1D1D9;
-            vertical-align: text-top;
-        };
-    `
-
-    
-
-    const InformationsSector = styled.div`
-        p {
-        margin: 0px;
-        padding: 0px;
-        }
-
-        p:nth-child(1) {
-            color: #9E9CA9;
-            font-size: 0.8em;
-        };
-
-        p:nth-child(2) {
-            color: black;
-            font-size: 0.8em;
-        };
-    `
-
     return (
         <>
             {scheduleList.map((schedule, index) => (
@@ -149,7 +122,9 @@ function ScheduleList(props: ListProps) {
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
                             </TimeSector>
-                            <div className={"divider-" + innerList.color}></div>
+                            <Divider 
+                                base_color={getColor(innerList.color, "base")}
+                                shadow_color={getColor(innerList.color, "shadow")} />
                             <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
