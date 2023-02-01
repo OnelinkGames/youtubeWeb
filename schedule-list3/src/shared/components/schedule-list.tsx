@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { List, ListProps, MonthList } from "./schedule-list.interfaces";
+import styled from "styled-components"
 import "./schedule-list.scss"
 
 // Function to sort the data using the data as a parameter.
@@ -86,25 +87,74 @@ function ScheduleList(props: ListProps) {
         console.log(scheduleList)
     }, [])
 
+    const HeaderDate = styled.div`
+        color: #9E9CA9;
+        margin: 20px;
+    `
+
+    const SchedList = styled.div`
+        width: 20%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+    `
+
+    const TimeSector = styled.div`
+        p {
+        margin: 0px;
+        padding: 0px;
+        }
+
+        p:nth-child(1) {
+            font-size: 1.2em;
+            font-weight: bolder;
+            color: #51438E;
+        };
+
+        p:nth-child(2) {
+            font-size: 0.6em;
+            color: #D1D1D9;
+            vertical-align: text-top;
+        };
+    `
+
+    const InformationsSector = styled.div`
+        p {
+        margin: 0px;
+        padding: 0px;
+        }
+
+        p:nth-child(1) {
+            color: #9E9CA9;
+            font-size: 0.8em;
+        };
+
+        p:nth-child(2) {
+            color: black;
+            font-size: 0.8em;
+        };
+    `
+
     return (
         <>
             {scheduleList.map((schedule, index) => (
-                <div key={index + "List"} className="schedule-date">
+                <HeaderDate key={index + "List"}>
                     <p>{schedule[0].date.getDate()} {convertMonth(schedule[0].date.getMonth())}</p>
                     {schedule.map((innerList) => (
-                        <div key={innerList.id} className="schedule-item">
-                            <div className="time">
+                        <SchedList key={innerList.id}>
+                            <TimeSector>
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
-                            </div>
+                            </TimeSector>
                             <div className={"divider-" + innerList.color}></div>
-                            <div className="informations">
+                            <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
-                            </div>
-                        </div>
+                            </InformationsSector>
+                        </SchedList>
                     ))}
-                </div>
+                </HeaderDate>
             ))}
         </>
     )
