@@ -119,6 +119,8 @@ function ScheduleList(props: ListProps) {
         };
     `
 
+    
+
     const InformationsSector = styled.div`
         p {
         margin: 0px;
