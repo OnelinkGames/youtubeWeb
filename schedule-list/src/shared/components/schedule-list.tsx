@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import api from "../../configs/api/api-config";
 import { List, ListProps, MonthList, ColorList } from './schedule-list.interfaces'
 import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
 
@@ -67,25 +68,7 @@ function convertMonth(month: number): string {
     return months[month];
 }
 
-function getColor(color: string, type: string): string {
-    let colors: ColorList = {
-        orange: {
-            base: "#CF9A66",
-            shadow: "#ce9c66e6"
-        },
-        purple: {
-            base: "#51438E",
-            shadow: "#564898e6"
-        },
-        red: {
-            base: "#CA0D0D",
-            shadow: "#d21818e6"
-        },
-        blue: {
-            base: "#7BC9E2",
-            shadow: "#298dabe6"
-        }
-    }
+function getColor(colors: ColorList, color: string, type: string): string {
 
     let finalColor = colors[color]
 
@@ -99,6 +82,9 @@ function ScheduleList(props: ListProps) {
     // UseState that will be used by the application.
     const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
 
+    // UseState that will be used for storing the colors.
+    const [colors, setColors] = useState<ColorList>({})
+
     // UseEffect used to check the data.
     useEffect(() => {
         // Sorting the data to adjust it accordingly to the date.
@@ -106,6 +92,10 @@ function ScheduleList(props: ListProps) {
 
         // Create the ScheduleList that will be used by the component.
         setScheduleList(createScheduleList(sortedList))
+    }, [list]);
+
+    useEffect(() => {
+        api.get("/colors").then((response) => setColors(response.data));
     }, [])
 
     return (
@@ -119,7 +109,9 @@ function ScheduleList(props: ListProps) {
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
                             </TimeSector>
-                            <Divider base_color={getColor(innerList.color, "base")} shadow_color={getColor(innerList.color, "shadow")} />
+                            <Divider 
+                            base_color={getColor(colors, innerList.color, "base")} 
+                            shadow_color={getColor(colors, innerList.color, "shadow")} />
                             <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
