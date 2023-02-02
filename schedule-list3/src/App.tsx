@@ -1,6 +1,8 @@
 import ScheduleList from "./shared/components/schedule-list"
 import { List } from "./shared/components/schedule-list.interfaces"
+import api from "./configs/api/api-config"
 import './App.css'
+import { useEffect, useState } from "react"
 
 // Mocked data to use on component.
 const mock: Array<List> = [
@@ -43,8 +45,21 @@ const mock: Array<List> = [
 ]
 
 function App() {
+  const [list, setList] = useState<Array<List>>([])
+
+  useEffect(() => {
+    api.get("/schedule-list").then((response) => {
+
+      response.data.forEach((item: any) => {
+        item.date = new Date(item.date)
+      })
+
+      setList(response.data)
+    })
+  }, [list])
+
   return (
-    <ScheduleList list={mock}></ScheduleList>
+    <ScheduleList list={list}></ScheduleList>
   )
 }
 
