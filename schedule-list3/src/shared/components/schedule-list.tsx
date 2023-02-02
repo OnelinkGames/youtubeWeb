@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { List, ListProps, MonthList } from "./schedule-list.interfaces";
-import "./schedule-list.scss"
+import api from "../../configs/api/api-config";
+import { ColorList, List, ListProps, MonthList } from "./schedule-list.interfaces";
+import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
@@ -67,6 +68,13 @@ function convertMonth(month: number): string {
     return months[month];
 }
 
+function getColor(colors: ColorList, color: string, type: string): string {
+
+    let finalColor = colors[color];
+
+    return type == "base" ? finalColor.base : finalColor.shadow;
+}
+
 function ScheduleList(props: ListProps) {
     // Recovering the props according to the interface.
     const { list } = props;
@@ -74,37 +82,45 @@ function ScheduleList(props: ListProps) {
     // UseState that will be used by the application.
     const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
 
+    // UseState that will be used for storing the colors.
+    const [colors, setColors] = useState<ColorList>({})
+
     // UseEffect used to check the data.
     useEffect(() => {
-        // Sorting the data to adjust it accordingly to the date
-        let sortedList = list.sort(sortList)
+        if (list.length > 0) {
+            // Sorting the data to adjust it accordingly to the date
+            let sortedList = list.sort(sortList)
 
-        // Create the ScheduleList that will be used by the component.
-        setScheduleList(createScheduleList(sortedList))
+            // Create the ScheduleList that will be used by the component.
+            setScheduleList(createScheduleList(sortedList))
+        }
+    }, [list])
 
-        // Print the object
-        console.log(scheduleList)
+    useEffect(() => {
+        api.get("/colors").then((response) => setColors(response.data))
     }, [])
 
     return (
         <>
             {scheduleList.map((schedule, index) => (
-                <div key={index + "List"} className="schedule-date">
+                <HeaderDate key={index + "List"}>
                     <p>{schedule[0].date.getDate()} {convertMonth(schedule[0].date.getMonth())}</p>
                     {schedule.map((innerList) => (
-                        <div key={innerList.id} className="schedule-item">
-                            <div className="time">
+                        <SchedList key={innerList.id}>
+                            <TimeSector>
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
-                            </div>
-                            <div className={"divider-" + innerList.color}></div>
-                            <div className="informations">
+                            </TimeSector>
+                            <Divider 
+                                base_color={getColor(colors, innerList.color, "base")}
+                                shadow_color={getColor(colors, innerList.color, "shadow")} />
+                            <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
-                            </div>
-                        </div>
+                            </InformationsSector>
+                        </SchedList>
                     ))}
-                </div>
+                </HeaderDate>
             ))}
         </>
     )
