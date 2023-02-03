@@ -19,12 +19,15 @@ export interface MonthList {
     [key: number]: string
 }
 
+// Interface for colors
+export interface Colors {
+    base: string,
+    shadow: string
+}
+
 // Interface for Color List.
 export interface ColorList {
-    [key: string]: {
-        base: string,
-        shadow: string
-    }
+    [key: string]: Colors
 }
 
 // Interface for DividerProps

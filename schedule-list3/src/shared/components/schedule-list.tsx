@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import api from "../../configs/api/api-config";
-import { ColorList, List, ListProps, MonthList } from "./schedule-list.interfaces";
+import { ColorList, Colors, List, ListProps, MonthList } from "./schedule-list.interfaces";
 import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
 
 // Function to sort the data using the data as a parameter.
@@ -68,11 +69,26 @@ function convertMonth(month: number): string {
     return months[month];
 }
 
-function getColor(colors: ColorList, color: string, type: string): string {
+function getColor(colors: ColorList | undefined, color: string, type: string): string {
 
-    let finalColor = colors[color];
+    let finalColor: Colors = {base: "", shadow: ""}
 
-    return type == "base" ? finalColor.base : finalColor.shadow;
+    if (typeof colors !== 'undefined') {
+        if (typeof colors[color] !== 'undefined')
+            finalColor = colors[color]
+        else
+            finalColor = colors['default']
+    }
+
+    return type === "base" ? finalColor.base : finalColor.shadow;
+}
+
+function fetchColors(): Promise<ColorList> {
+    return api.get("/colors").then((response) => response.data)
+}
+
+function useColors() {
+    return useQuery<ColorList, Error>({ queryKey: "colors", queryFn: fetchColors })
 }
 
 function ScheduleList(props: ListProps | undefined) {
@@ -84,8 +100,7 @@ function ScheduleList(props: ListProps | undefined) {
     // UseState that will be used by the application.
     const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
 
-    // UseState that will be used for storing the colors.
-    const [colors, setColors] = useState<ColorList>({})
+    const { data: colors, isLoading } = useColors()
 
     // UseEffect used to check the data.
     useEffect(() => {
@@ -97,10 +112,6 @@ function ScheduleList(props: ListProps | undefined) {
             setScheduleList(createScheduleList(sortedList))
         }
     }, [list])
-
-    useEffect(() => {
-        api.get("/colors").then((response) => setColors(response.data))
-    }, [])
 
     return (
         <>
