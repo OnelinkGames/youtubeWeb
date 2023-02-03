@@ -75,9 +75,11 @@ function getColor(colors: ColorList, color: string, type: string): string {
     return type == "base" ? finalColor.base : finalColor.shadow;
 }
 
-function ScheduleList(props: ListProps) {
-    // Recovering the props according to the interface.
-    const { list } = props;
+function ScheduleList(props: ListProps | undefined) {
+    let list: Array<List> = []
+
+    if (typeof props !== 'undefined')
+        list = props.list as List[]
 
     // UseState that will be used by the application.
     const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
