@@ -18,3 +18,17 @@ export interface ListProps {
 export interface MonthList {
     [key: number]: string
 }
+
+// Interface for Color List.
+export interface ColorList {
+    [key: string]: {
+        base: string,
+        shadow: string
+    }
+}
+
+// Interface for DividerProps
+export interface DividerProps {
+    base_color?: string,
+    shadow_color?: string
+}
