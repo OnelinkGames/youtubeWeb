@@ -11,7 +11,7 @@ export interface List {
 
 // Interface for the props of the component.
 export interface ListProps {
-    list: Array<List>
+    list?: Array<List>
 }
 
 // Interface for month list.
@@ -19,12 +19,15 @@ export interface MonthList {
     [key: number]: string
 }
 
+// Interface for colors
+export interface Colors {
+    base: string,
+    shadow: string
+}
+
 // Interface for color list.
 export interface ColorList {
-    [key: string]: {
-        base: string,
-        shadow: string
-    }
+    [key: string]: Colors
 }
 
 export interface DividerProps {

@@ -1,22 +1,19 @@
 import ScheduleList from './shared/components/schedule-list'
 import { List } from './shared/components/schedule-list.interfaces'
-import { useEffect, useState } from 'react'
 import './App.css'
-import api from './configs/api/api-config'
+import { Loading } from './shared/components/schedule-list.styles'
+import useList from './hooks/useList'
 
 function App() {
-  const [list, setList] = useState<Array<List>>([])
+  const { data: list, isLoading, error } = useList()
 
-  useEffect(() => {
-    api.get("/schedule-list").then((response) => {
-      
-      response.data.forEach((item: any) => {
-        item.date = new Date(item.date);
-      })
+  if (isLoading) {
+    return <Loading />
+  }
 
-      setList(response.data);
-    })
-  }, [])
+  if (error) {
+    return <div>Algo deu errado!</div>
+  }
 
   return (
     <ScheduleList list={list}></ScheduleList>

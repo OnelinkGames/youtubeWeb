@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import api from "../../configs/api/api-config";
-import { List, ListProps, MonthList, ColorList } from './schedule-list.interfaces'
-import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
+import useColors from "../../hooks/useColors";
+import { List, ListProps, MonthList, ColorList, Colors } from './schedule-list.interfaces'
+import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector, LoadingSmall } from "./schedule-list.styles";
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
@@ -68,35 +68,41 @@ function convertMonth(month: number): string {
     return months[month];
 }
 
-function getColor(colors: ColorList, color: string, type: string): string {
+function getColor(colors: ColorList | undefined, color: string, type: string): string {
+    let finalColor: Colors = {base: "", shadow: ""}
 
-    let finalColor = colors[color]
+    if (typeof colors !== 'undefined') {
+        if (typeof colors[color] !== 'undefined')
+            finalColor = colors[color]
+        else
+            finalColor = colors['default']
+    }
 
-    return type == "base" ? finalColor.base : finalColor.shadow;
+    return type === "base" ? finalColor.base : finalColor.shadow;
 }
 
-function ScheduleList(props: ListProps) {
-    // Recovering the props according to the interface.
-    const { list } = props;
+function ScheduleList(props: ListProps | undefined) {
+    let list: Array<List> = []
+
+    if (typeof props !== 'undefined') {
+        list = props.list as List[]
+    }
 
     // UseState that will be used by the application.
     const [scheduleList, setScheduleList] = useState<Array<Array<List>>>([])
 
-    // UseState that will be used for storing the colors.
-    const [colors, setColors] = useState<ColorList>({})
+    const { data: colors, isLoading } = useColors()
 
     // UseEffect used to check the data.
     useEffect(() => {
-        // Sorting the data to adjust it accordingly to the date.
-        let sortedList = list.sort(sortList);
+        if (list.length > 0) {
+            // Sorting the data to adjust it accordingly to the date.
+            let sortedList = list.sort(sortList);
 
-        // Create the ScheduleList that will be used by the component.
-        setScheduleList(createScheduleList(sortedList))
+            // Create the ScheduleList that will be used by the component.
+            setScheduleList(createScheduleList(sortedList))
+        }
     }, [list]);
-
-    useEffect(() => {
-        api.get("/colors").then((response) => setColors(response.data));
-    }, [])
 
     return (
         <>
@@ -109,9 +115,9 @@ function ScheduleList(props: ListProps) {
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
                             </TimeSector>
-                            <Divider 
+                            { isLoading ? <LoadingSmall /> : <Divider 
                             base_color={getColor(colors, innerList.color, "base")} 
-                            shadow_color={getColor(colors, innerList.color, "shadow")} />
+                            shadow_color={getColor(colors, innerList.color, "shadow")} />}
                             <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
