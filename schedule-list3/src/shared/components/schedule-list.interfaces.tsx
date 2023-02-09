@@ -11,7 +11,7 @@ export interface List {
 
 // Interface for the props of the component.
 export interface ListProps {
-    list: Array<List>
+    list?: Array<List>
 }
 
 // Interface for month list.

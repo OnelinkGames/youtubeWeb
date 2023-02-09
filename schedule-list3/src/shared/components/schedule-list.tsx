@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import api from "../../configs/api/api-config";
+import useColors from "../../hooks/useColors";
 import { ColorList, Colors, List, ListProps, MonthList } from "./schedule-list.interfaces";
-import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector } from "./schedule-list.styles";
+import { HeaderDate, SchedList, TimeSector, Divider, InformationsSector, LoadingSmall } from "./schedule-list.styles";
 
 // Function to sort the data using the data as a parameter.
 function sortList(firstDate: List, lastDate: List) {
@@ -29,7 +28,7 @@ function createScheduleList(list: Array<List>): Array<Array<List>> {
 
     list.forEach((element, index) => {
         if (index != 0) {
-            let checkDate = compareDate(list[index -1].date, list[index].date);
+            let checkDate = compareDate(list[index - 1].date, list[index].date);
 
             if (checkDate) {
                 tempArray.push(element);
@@ -71,7 +70,7 @@ function convertMonth(month: number): string {
 
 function getColor(colors: ColorList | undefined, color: string, type: string): string {
 
-    let finalColor: Colors = {base: "", shadow: ""}
+    let finalColor: Colors = { base: "", shadow: "" }
 
     if (typeof colors !== 'undefined') {
         if (typeof colors[color] !== 'undefined')
@@ -81,14 +80,6 @@ function getColor(colors: ColorList | undefined, color: string, type: string): s
     }
 
     return type === "base" ? finalColor.base : finalColor.shadow;
-}
-
-function fetchColors(): Promise<ColorList> {
-    return api.get("/colors").then((response) => response.data)
-}
-
-function useColors() {
-    return useQuery<ColorList, Error>({ queryKey: "colors", queryFn: fetchColors })
 }
 
 function ScheduleList(props: ListProps | undefined) {
@@ -124,9 +115,9 @@ function ScheduleList(props: ListProps | undefined) {
                                 <p>{innerList.startTime}</p>
                                 <p>{innerList.finalTime}</p>
                             </TimeSector>
-                            <Divider 
+                            {isLoading ? <LoadingSmall /> : <Divider
                                 base_color={getColor(colors, innerList.color, "base")}
-                                shadow_color={getColor(colors, innerList.color, "shadow")} />
+                                shadow_color={getColor(colors, innerList.color, "shadow")} />}
                             <InformationsSector>
                                 <p>{innerList.title}</p>
                                 <p>{innerList.description}</p>
